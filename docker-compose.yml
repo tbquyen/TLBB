@@ -1,0 +1,32 @@
+services:
+  tlbb-database:
+    image: mysql:5.7
+    container_name: tlbb-database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: tlbbdb
+      MYSQL_USER: tlbb
+      MYSQL_PASSWORD: 12345678
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  tlbb-server:
+    image: tlbb-server:latest
+    build: ./server
+    container_name: tlbb-server
+    depends_on:
+      tlbb-database:
+        condition: service_healthy
+    restart: always
+    ports:
+      - 7775:7775
+      - 7776:7776
+    working_dir: /app/tlbb
+    command: [ "bash", "-c", "./run.sh && tail -f /dev/null" ]

@@ -1,0 +1,23 @@
+# datatable
+mysql/data
+server/tlbb.tar.gz
+server/tlbb
+
+# Visual Studio Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Docker
+*.env
+
+# MacOS
+*.DS_Store
+
+# Linux
+*~
